@@ -1,23 +1,19 @@
-# doc = xmlParseDoc("~//Library//Mobile Documents//com~apple~CloudDocs/Documents/apple_health_export_5_14_2017/export.xml")
-# nodeset <- getNodeSet(doc,'//HealthData/Record[@type = "HKQuantityTypeIdentifierHeartRate"]')
-# z<-xmlToDataFrame(doc,nodes=nodeset,colClasses=c("character","character","character","character","character","character","character","numeric"),collectNames=T)
-# z<-xmlToDataFrame(doc,nodes=nodeset,collectNames=T)
-# 
-# l<-xmlToList(nodeset)
-# 
-# 
-# xattrs <- data.frame(xpathSApply(doc,'//HealthData/Record[@type = "HKQuantityTypeIdentifierHeartRate"]',xmlAttrs),stringsAsFactors = F)
-# z <- data.frame(t(xattrs))[,c(1,7,9)]
+library(XML)
+library(ggplot2)
+# Define the xml document
+doc = xmlParseDoc("/home/sasdemo/apple_health_export/export.xml")
 
-#write.table(z,'//Users//samuelcroker//OneDrive//R//z.dat')
-z <- read.table('z.dat')
-rownames(z ) <- NULL
+#Begin extraction process for heart rate
+xattrs <- data.frame(xpathSApply(doc,'//HealthData/Record[@type = "HKQuantityTypeIdentifierHeartRate"]',xmlAttrs),stringsAsFactors = F)
+
+#Extract necessary columns from transposed dataframe
+z <- data.frame(t(xattrs))[,c(1,7,9)]
 
 z.1 <- transform(z,stdt=strftime(startDate,"%Y-%m-%d %H:%M:%S %z"))
 z.1$value <- as.numeric(as.character(z.1$value))
 z.2 <- transform(z.1,year=strftime(stdt,"%Y"),month=strftime(stdt,"%Y-%m"),day=strftime(stdt,"%d"),hour=strftime(stdt,"%H"))
 z.2$month <- as.character(z.1$month)
-library(ggplot2)
+
 z.2017 <- subset(z.2,year=="2017" )
 quantile(x = z.2017$value,probs=seq(0,1, 0.1))
 tail(z.2017)
