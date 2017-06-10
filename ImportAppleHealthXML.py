@@ -16,7 +16,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import re 
 
-get_ipython().magic(u'matplotlib inline')
+#get_ipython().magic(u'matplotlib inline')
 plt.rcParams['figure.figsize'] = 16, 8
 
 
@@ -25,6 +25,7 @@ plt.rcParams['figure.figsize'] = 16, 8
 # The first time through the process, regular sign in and two factor authentication is required (if you require two factor auth) but after that it is just a process of telling Google that it is ok for your Google application to access Drive.
 
 # Authenticate into Google Drive
+print("\n\nNOTE: You may receive an error message on MacOS about not knowing how to open a browser.\nIf this happens, cut and paste the url below into your browser and continue the authentication\n\n")
 from pydrive.auth import GoogleAuth
 
 gauth = GoogleAuth()
@@ -47,7 +48,7 @@ file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList
 #     it is readable and easy one pass way to get the most current file using the 
 #     least (or low) amount of resouces
 selection_dt = datetime.strptime("2000-01-01T01:01:01.001Z","%Y-%m-%dT%H:%M:%S.%fZ")
-print("Matching Files")
+print("Matching Files for most recent upload identification")
 for file1 in file_list: 
     if re.search("^export.zip",file1['title']):
         dt = datetime.strptime(file1['createdDate'],"%Y-%m-%dT%H:%M:%S.%fZ")
@@ -67,18 +68,20 @@ for file1 in file_list:
 
 
 import zipfile
+print('Unzipping into healthextract for use')
 zip_ref = zipfile.ZipFile('healthextract/export.zip', 'r')
 zip_ref.extractall('healthextract')
 zip_ref.close()
 
 # ## Parse Apple Health Export document
 
+print('Parsing XML...')
 path = "healthextract/apple_health_export/export.xml"
 e = et.parse(path)
 
 
 # ## List XML headers by element count
-d.Series([el.tag for el in e.iter()]).value_counts()
+pd.Series([el.tag for el in e.iter()]).value_counts()
 
 
 # ## List types for "Record" Header
@@ -89,38 +92,50 @@ pd.Series([atype.get('type') for atype in e.findall('Record')]).value_counts()
 #Extract the heartrate values, and get a timestamp from the xml
 # there is likely a more efficient way, though this is very fast
 def xmltodf(element,outvaluename):
-
     dt = []
     v = []
     for atype in e.findall('Record'):
         if atype.get('type') == element:
             dt.append(datetime.strptime(atype.get("startDate"),"%Y-%m-%d %H:%M:%S %z"))
             v.append(atype.get("value"))
-
-
     myd = pd.DataFrame({"Create":dt,outvaluename:v})
     myd['Month'] = myd['Create'].apply(lambda x: x.strftime('%Y-%m'))
     myd['Day'] = myd['Create'].apply(lambda x: x.strftime('%d'))
     myd['Hour'] = myd['Create'].apply(lambda x: x.strftime('%H'))
 
     myd[outvaluename] = myd[outvaluename].astype(float).astype(int)
-    
+    print('Extracting ' + outvaluename + ', type: ' + element)
     return(myd)
 
 HR_df = xmltodf("HKQuantityTypeIdentifierHeartRate","HeartRate")
-SC_df = xmltodf("HKQuantityTypeIdentifierHeartRate","HeartRate")
+SC_df = xmltodf("HKQuantityTypeIdentifierStepCount","StepCount")
 
+print("Plotting Month by Heartrate")
 HR_df.boxplot(by='Month',column="HeartRate", return_type='axes')
+plt.savefig('graphs/MonthbyHR.pdf')
+plt.close()
 
-ax = HR_df[HR_df['Month']=='2017-05'].boxplot(by='Day',column="HeartRate", return_type='axes')
 
-HR_df[HR_df['Month']=='2017-05'].boxplot(by='Hour',column="HeartRate")
+monthlock='2017-05'
+print("Plotting Day by Heartrate for " + monthlock)
+HR_df[HR_df['Month']==monthlock].boxplot(by='Day',column="HeartRate", return_type='axes')
+plt.savefig('graphs/DaybyHR' + monthlock + '.pdf')
+plt.close()
+
+
+print("Plotting Hour of Day by Heartrate for " + monthlock)
+HR_df[HR_df['Month']==monthlock].boxplot(by='Hour',column="HeartRate")
+plt.savefig('graphs/HourbyHR' + monthlock + '.pdf')
+plt.close()
+
 
 import numpy as np
 import seaborn as sns
 sns.set(style="ticks", palette="muted", color_codes=True)
 
+print("Plotting Month by Heartrate using Seaborn")
 sns.boxplot(x="Month", y="HeartRate", data=HR_df,whis=np.inf, color="c")
 # Add in points to show each observation
-sns.stripplot(x="Month", y="HeartRate", data=HR_df,jitter=True, size=1, alpha=.25, color=".3", linewidth=0)
-
+snsplot = sns.stripplot(x="Month", y="HeartRate", data=HR_df,jitter=True, size=1, alpha=.25, color=".3", linewidth=0).get_figure()
+snsplot.savefig('graphs/Seaborn_MonthbyHR.pdf') 
+print("Done...")
