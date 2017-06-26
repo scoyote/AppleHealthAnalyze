@@ -2,3 +2,5 @@ client_secrets.json
 *.zip
 healthextract/*
 *checkpoints.ipynb
+*.yaml
+*.json
