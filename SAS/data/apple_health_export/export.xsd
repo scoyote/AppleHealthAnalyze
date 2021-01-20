@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="HealthData" type="HealthDataType">
+    <xs:annotation>
+      <xs:documentation>HealthKit Export Version: 11  Note: Any Records that appear as children of a correlation also appear as top-level records in this document.  Note: Heart Rate Variability records captured by Apple Watch may include an associated list of instantaneous beats-per-minute readings.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ExportDateType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="value"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="MeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="HKCharacteristicTypeIdentifierDateOfBirth"/>
+        <xs:attribute type="xs:string" name="HKCharacteristicTypeIdentifierBiologicalSex"/>
+        <xs:attribute type="xs:string" name="HKCharacteristicTypeIdentifierBloodType"/>
+        <xs:attribute type="xs:string" name="HKCharacteristicTypeIdentifierFitzpatrickSkinType"/>
+        <xs:attribute type="xs:string" name="HKCharacteristicTypeIdentifierCardioFitnessMedicationsUse"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="MetadataEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="key" use="optional"/>
+        <xs:attribute type="xs:string" name="value" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="RecordType" mixed="true">
+    <xs:sequence>
+      <xs:element type="MetadataEntryType" name="MetadataEntry" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="HeartRateVariabilityMetadataListType" name="HeartRateVariabilityMetadataList" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceName" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceVersion" use="optional"/>
+    <xs:attribute type="xs:string" name="unit" use="optional"/>
+    <xs:attribute type="xs:string" name="creationDate" use="optional"/>
+    <xs:attribute type="xs:string" name="startDate" use="optional"/>
+    <xs:attribute type="xs:string" name="endDate" use="optional"/>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+    <xs:attribute type="xs:string" name="device" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="CorrelationType">
+    <xs:sequence>
+      <xs:element type="MetadataEntryType" name="MetadataEntry"/>
+      <xs:element type="RecordType" name="Record" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceName" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceVersion" use="optional"/>
+    <xs:attribute type="xs:string" name="creationDate" use="optional"/>
+    <xs:attribute type="xs:string" name="startDate" use="optional"/>
+    <xs:attribute type="xs:string" name="endDate" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="WorkoutType" mixed="true">
+    <xs:sequence>
+      <xs:element type="MetadataEntryType" name="MetadataEntry" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="WorkoutEventType" name="WorkoutEvent" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="WorkoutRouteType" name="WorkoutRoute" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="workoutActivityType" use="optional"/>
+    <xs:attribute type="xs:string" name="duration" use="optional"/>
+    <xs:attribute type="xs:string" name="durationUnit" use="optional"/>
+    <xs:attribute type="xs:string" name="totalDistance" use="optional"/>
+    <xs:attribute type="xs:string" name="totalDistanceUnit" use="optional"/>
+    <xs:attribute type="xs:string" name="totalEnergyBurned" use="optional"/>
+    <xs:attribute type="xs:string" name="totalEnergyBurnedUnit" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceName" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceVersion" use="optional"/>
+    <xs:attribute type="xs:string" name="creationDate" use="optional"/>
+    <xs:attribute type="xs:string" name="startDate" use="optional"/>
+    <xs:attribute type="xs:string" name="endDate" use="optional"/>
+    <xs:attribute type="xs:string" name="device" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="FileReferenceType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="path" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="WorkoutRouteType">
+    <xs:sequence>
+      <xs:element type="MetadataEntryType" name="MetadataEntry" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="FileReferenceType" name="FileReference"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="sourceName" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceVersion" use="optional"/>
+    <xs:attribute type="xs:string" name="creationDate" use="optional"/>
+    <xs:attribute type="xs:string" name="startDate" use="optional"/>
+    <xs:attribute type="xs:string" name="endDate" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="WorkoutEventType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="date" use="optional"/>
+        <xs:attribute type="xs:string" name="duration" use="optional"/>
+        <xs:attribute type="xs:string" name="durationUnit" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ActivitySummaryType" mixed="true">
+    <xs:sequence>
+      <xs:element type="MetadataEntryType" name="MetadataEntry" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="HeartRateVariabilityMetadataListType" name="HeartRateVariabilityMetadataList" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="dateComponents" use="optional"/>
+    <xs:attribute type="xs:string" name="activeEnergyBurned" use="optional"/>
+    <xs:attribute type="xs:string" name="activeEnergyBurnedGoal" use="optional"/>
+    <xs:attribute type="xs:string" name="activeEnergyBurnedUnit" use="optional"/>
+    <xs:attribute type="xs:string" name="appleMoveTime" use="optional"/>
+    <xs:attribute type="xs:string" name="appleMoveTimeGoal" use="optional"/>
+    <xs:attribute type="xs:string" name="appleExerciseTime" use="optional"/>
+    <xs:attribute type="xs:string" name="appleExerciseTimeGoal" use="optional"/>
+    <xs:attribute type="xs:string" name="appleStandHours" use="optional"/>
+    <xs:attribute type="xs:string" name="appleStandHoursGoal" use="optional"/>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceName" use="optional"/>
+    <xs:attribute type="xs:string" name="sourceVersion" use="optional"/>
+    <xs:attribute type="xs:string" name="unit" use="optional"/>
+    <xs:attribute type="xs:string" name="creationDate" use="optional"/>
+    <xs:attribute type="xs:string" name="startDate" use="optional"/>
+    <xs:attribute type="xs:string" name="endDate" use="optional"/>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+    <xs:attribute type="xs:string" name="device" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="InstantaneousBeatsPerMinuteType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="bpm" use="optional"/>
+        <xs:attribute type="xs:string" name="time" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="HeartRateVariabilityMetadataListType">
+    <xs:sequence>
+      <xs:element type="InstantaneousBeatsPerMinuteType" name="InstantaneousBeatsPerMinute" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ClinicalRecordType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="identifier" use="optional"/>
+        <xs:attribute type="xs:string" name="sourceName" use="optional"/>
+        <xs:attribute type="xs:string" name="sourceURL" use="optional"/>
+        <xs:attribute type="xs:string" name="fhirVersion" use="optional"/>
+        <xs:attribute type="xs:string" name="receivedDate" use="optional"/>
+        <xs:attribute type="xs:string" name="resourceFilePath" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="HealthDataType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="ExportDateType" name="ExportDate"/>
+      <xs:element type="MeType" name="Me"/>
+      <xs:element type="RecordType" name="Record" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="CorrelationType" name="Correlation"/>
+      <xs:element type="WorkoutType" name="Workout" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="ActivitySummaryType" name="ActivitySummary" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="ClinicalRecordType" name="ClinicalRecord" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:choice>
+    <xs:attribute type="xs:string" name="locale"/>
+  </xs:complexType>
+</xs:schema>

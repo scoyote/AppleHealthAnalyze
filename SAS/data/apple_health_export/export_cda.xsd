@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ClinicalDocument" type="urn:ClinicalDocumentType" xmlns:urn="urn:hl7-org:v3"/>
+  <xs:complexType name="realmCodeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="code"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="typeIdType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="root"/>
+        <xs:attribute type="xs:string" name="extension"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="templateIdType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="root" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="idType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="extension" use="optional"/>
+        <xs:attribute type="xs:string" name="root" use="optional"/>
+        <xs:attribute type="xs:string" name="nullFlavor" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="codeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="codeSystem" use="optional"/>
+        <xs:attribute type="xs:string" name="codeSystemName" use="optional"/>
+        <xs:attribute type="xs:string" name="code" use="optional"/>
+        <xs:attribute type="xs:string" name="displayName" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="effectiveTimeType" mixed="true">
+    <xs:sequence>
+      <xs:element type="urn:lowType" name="low" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:highType" name="high" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="confidentialityCodeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="code"/>
+        <xs:attribute type="xs:string" name="codeSystem"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="nameType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="use"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="administrativeGenderCodeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="code"/>
+        <xs:attribute type="xs:string" name="codeSystem"/>
+        <xs:attribute type="xs:string" name="displayName"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="birthTimeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="value"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="patientType">
+    <xs:sequence>
+      <xs:element type="urn:nameType" name="name" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:administrativeGenderCodeType" name="administrativeGenderCode" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:birthTimeType" name="birthTime" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="patientRoleType">
+    <xs:sequence>
+      <xs:element type="urn:idType" name="id" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:patientType" name="patient" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="recordTargetType">
+    <xs:sequence>
+      <xs:element type="urn:patientRoleType" name="patientRole" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="statusCodeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="code" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="metadataEntryType">
+    <xs:sequence>
+      <xs:element name="key">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="HKAndonDataIdKey"/>
+            <xs:enumeration value="HKWasUserEntered"/>
+            <xs:enumeration value="UserID"/>
+            <xs:enumeration value="HKMetadataKeyHeartRateMotionContext"/>
+            <xs:enumeration value="HKMetadataKeySyncVersion"/>
+            <xs:enumeration value="HKMetadataKeySyncIdentifier"/>
+            <xs:enumeration value="HKMetadataKeyBarometricPressure"/>
+            <xs:enumeration value="HKBodyTemperatureSensorLocation"/>
+            <xs:enumeration value="HKDeviceManufacturerName"/>
+            <xs:enumeration value="HKDeviceName"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:string" name="value"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="textType">
+    <xs:sequence>
+      <xs:element name="sourceName">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="iHealth"/>
+            <xs:enumeration value="Health"/>
+            <xs:enumeration value="Stc_sas"/>
+            <xs:enumeration value="Sams iPhone"/>
+            <xs:enumeration value="Samuel’s Apple Watch"/>
+            <xs:enumeration value="⫎⋊⋋⦦⟛⫍"/>
+            <xs:enumeration value="STC Apple Watch "/>
+            <xs:enumeration value="Blood Oxygen"/>
+            <xs:enumeration value="Kinsa Smart Stick"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:string" name="sourceVersion"/>
+      <xs:element type="xs:string" name="device" minOccurs="0"/>
+      <xs:element type="xs:string" name="value"/>
+      <xs:element name="type">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="HKQuantityTypeIdentifierPeripheralPerfusionIndex"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierBodyMassIndex"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierHeight"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierBodyMass"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierHeartRate"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierOxygenSaturation"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierBloodPressureSystolic"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierBloodPressureDiastolic"/>
+            <xs:enumeration value="HKQuantityTypeIdentifierBodyTemperature"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="unit">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="%"/>
+            <xs:enumeration value="count"/>
+            <xs:enumeration value="ft"/>
+            <xs:enumeration value="lb"/>
+            <xs:enumeration value="count/min"/>
+            <xs:enumeration value="mmHg"/>
+            <xs:enumeration value="degF"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="urn:metadataEntryType" name="metadataEntry" maxOccurs="unbounded" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="lowType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="value" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="highType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="value" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="valueType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="value" use="optional"/>
+        <xs:attribute type="xs:string" name="unit" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="interpretationCodeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="code" use="optional"/>
+        <xs:attribute type="xs:string" name="codeSystem" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="observationType">
+    <xs:sequence>
+      <xs:element type="urn:templateIdType" name="templateId" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:idType" name="id" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:codeType" name="code" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:textType" name="text" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:statusCodeType" name="statusCode" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:effectiveTimeType" name="effectiveTime" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:valueType" name="value" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:interpretationCodeType" name="interpretationCode" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="classCode" use="optional"/>
+    <xs:attribute type="xs:string" name="moodCode" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="componentType">
+    <xs:sequence>
+      <xs:element type="urn:observationType" name="observation" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:sectionType" name="section" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="organizerType">
+    <xs:sequence>
+      <xs:element type="urn:templateIdType" name="templateId" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:idType" name="id" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:codeType" name="code" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:statusCodeType" name="statusCode" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:effectiveTimeType" name="effectiveTime" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:componentType" name="component" maxOccurs="unbounded" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="classCode" use="optional"/>
+    <xs:attribute type="xs:string" name="moodCode" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="entryType">
+    <xs:sequence>
+      <xs:element type="urn:organizerType" name="organizer" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="typeCode" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="sectionType">
+    <xs:sequence>
+      <xs:element type="urn:templateIdType" name="templateId" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:codeType" name="code" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="xs:string" name="title"/>
+      <xs:element type="xs:string" name="text"/>
+      <xs:element type="urn:entryType" name="entry" maxOccurs="unbounded" minOccurs="0" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ClinicalDocumentType">
+    <xs:sequence>
+      <xs:element type="urn:realmCodeType" name="realmCode" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:typeIdType" name="typeId" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:templateIdType" name="templateId" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:idType" name="id" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:codeType" name="code" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="xs:string" name="title"/>
+      <xs:element type="urn:effectiveTimeType" name="effectiveTime" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:confidentialityCodeType" name="confidentialityCode" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:recordTargetType" name="recordTarget" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:entryType" name="entry" xmlns:urn="urn:hl7-org:v3"/>
+      <xs:element type="urn:componentType" name="component" xmlns:urn="urn:hl7-org:v3"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
