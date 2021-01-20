@@ -4,3 +4,7 @@ healthextract/*
 *checkpoints.ipynb
 *.yaml
 *.json
+SAS/data/*
+*.csv
+*.gpx
+*.xml
