@@ -8,3 +8,4 @@ SAS/data/*
 *.csv
 *.gpx
 *.xml
+.DS_Store
